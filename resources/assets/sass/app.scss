@@ -1,0 +1,64 @@
+
+// Fonts
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+@import "bootstrap-notifications";
+
+[v-cloak] {
+    display: none;
+}
+
+.dropdown-notifications {
+    .dropdown-container {
+        margin-top: 0px;
+    }
+
+    .notification-icon.hide-count:after {
+        display: none;
+    }
+
+    .dropdown-toolbar .dropdown-toolbar-actions {
+        margin-top: -2px;
+        font-size: 13px;
+    }
+
+    .notification-mark-read {
+        float: right;
+        float: right;
+        color: #333;
+        opacity: 0.4;
+
+        &:hover {
+            opacity: .8;
+        }
+    }
+
+    .notification-action {
+        margin-top: 5px;
+        margin-bottom: 2px;
+    }
+
+    .notification .media-body {
+        padding-top: 0px;
+    }
+
+    .media-object img {
+        width: 64px;
+    }
+}
+
+@media (max-width: $screen-sm-min) {
+    .navbar-collapse.in {
+        overflow-y: initial;
+    }
+
+    .dropdown-notifications > .dropdown-container {
+        width: auto;
+    }
+}
