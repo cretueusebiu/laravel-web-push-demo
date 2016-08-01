@@ -9,8 +9,8 @@
 - `git clone https://github.com/cretueusebiu/laravel-web-push-demo.git`
 - `cd laravel-web-push-demo`
 - `composer install`
-- `php artisan key:generate`
 - `cp .env.example .env`
+- `php artisan key:generate`
 - Edit `.env` 
     - Set your database connection details
     - Set `GCM_KEY` and `GCM_SENDER_ID` from [Google Console](https://console.cloud.google.com)
