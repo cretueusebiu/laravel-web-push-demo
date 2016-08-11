@@ -2,9 +2,9 @@
 
 namespace App;
 
-use App\WebPush\HasPushSubscriptions;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use NotificationChannels\WebPushNotifications\HasPushSubscriptions;
 
 class User extends Authenticatable
 {

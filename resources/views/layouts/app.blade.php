@@ -5,18 +5,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- GCM Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>Laravel</title>
 
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="manifest" href="/manifest.json">
+
+    <!-- Scripts -->
+    <script>
+        window.Laravel = <?php echo json_encode([
+            'csrfToken' => csrf_token(),
+        ]); ?>
+    </script>
 </head>
 <body v-cloak>
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <div class="navbar-header">
-
                 <!-- Collapsed Hamburger -->
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
                     <span class="sr-only">Toggle Navigation</span>
@@ -34,9 +45,11 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    @if (Auth::check())
-                        <notifications-dropdown></notifications-dropdown>
-                    @endif
+                    <ul class="nav navbar-nav">
+                        @if (Auth::check())
+                            <notifications-dropdown></notifications-dropdown>
+                        @endif
+                    </ul>
                 </ul>
 
                 <!-- Right Side Of Navbar -->
@@ -78,7 +91,7 @@
         window.USER = {!! Auth::check() ? Auth::user() : 'null' !!};
 
         window.PUSHER_OPTIONS = {
-            pusherKey: '{{ config('broadcasting.connections.pusher.key') }}',
+            key: '{{ config('broadcasting.connections.pusher.key') }}',
             cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}'
         };
     </script>

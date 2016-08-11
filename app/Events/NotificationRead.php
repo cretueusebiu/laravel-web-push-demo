@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
@@ -42,6 +43,6 @@ class NotificationRead implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['private-user.'.$this->userId.'.notifications'];
+        return [new PrivateChannel("App.User.{$this->userId}")];
     }
 }

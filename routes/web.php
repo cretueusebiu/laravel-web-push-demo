@@ -20,16 +20,16 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 
 // Notifications
-Route::post('web-push/notifications', 'NotificationsController@store');
-Route::get('web-push/notifications', 'NotificationsController@index');
-Route::get('web-push/notifications/last', 'NotificationsController@last');
-Route::patch('web-push/notifications/{id}/read', 'NotificationsController@markRead');
-Route::post('web-push/notifications/mark-all-read', 'NotificationsController@markAllRead');
-Route::post('web-push/notifications/{id}/dismiss', 'NotificationsController@dismiss');
+Route::post('notifications', 'NotificationController@store');
+Route::get('notifications', 'NotificationController@index');
+Route::get('notifications/last', 'NotificationController@last');
+Route::patch('notifications/{id}/read', 'NotificationController@markAsRead');
+Route::post('notifications/mark-all-read', 'NotificationController@markAllRead');
+Route::post('notifications/{id}/dismiss', 'NotificationController@dismiss');
 
 // Push Subscriptions
-Route::post('web-push/subscriptions', 'PushSubscriptionsController@update');
-Route::post('web-push/subscriptions/delete', 'PushSubscriptionsController@destroy');
+Route::post('subscriptions', 'PushSubscriptionController@update');
+Route::post('subscriptions/delete', 'PushSubscriptionController@destroy');
 
 // Manifest file
 Route::get('manifest.json', function () {

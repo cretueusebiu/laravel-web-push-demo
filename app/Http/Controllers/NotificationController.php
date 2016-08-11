@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use NotificationChannels\WebPushNotifications\PushSubscription;
+
 use App\Events\NotificationRead;
-use App\WebPush\PushSubscription;
-use App\Events\NotificationCreated;
 use App\Events\NotificationReadAll;
 use App\Notifications\HelloNotification;
 
-class NotificationsController extends Controller
+class NotificationController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -29,19 +29,17 @@ class NotificationsController extends Controller
      */
     public function index(Request $request)
     {
-        $relation = $request->user()->notifications();
+        $user = $request->user();
 
-        $total = $relation->where('read', false)->count('id');
-
-        $notifications = $relation->where('read', false)
-            ->orderBy('id', 'desc')
-            ->limit((int) $request->limit)
-            ->get()
-            ->each(function ($n) {
+        $notifications = $user->unreadNotifications()
+            ->limit((int) $request->input('limit', 0))
+            ->get()->each(function ($n) {
                 $n->created = $n->created_at->toIso8601String();
             });
 
-        return compact('total', 'notifications');
+        $total = $user->unreadNotifications->count();
+
+        return compact('notifications', 'total');
     }
 
     /**
@@ -52,42 +50,9 @@ class NotificationsController extends Controller
      */
     public function store(Request $request)
     {
-        // Create the notification instance.
-        $notification = new HelloNotification();
-        $notification->message();
+        $request->user()->notify(new HelloNotification);
 
-        // Manualy save the notification to database.
-        $model = $this->saveToDatabase($notification);
-
-        // Set the id of the notification model.
-        $notification->id = $model->id;
-
-        // Notify the user.
-        auth()->user()->notify($notification);
-
-        // Broadcast event.
-        event(new NotificationCreated($model));
-
-        return response()->json($model, 201);
-    }
-
-    /**
-     * Save the given notification instance to database.
-     *
-     * @param  \Illuminate\Notifications\Notification $notification
-     * @return \Illuminate\Notifications\DatabaseNotification
-     */
-    protected function saveToDatabase($notification)
-    {
-        return auth()->user()->notifications()->create([
-            'subject' => $notification->subject,
-            'level' => $notification->level,
-            'intro' => $notification->introLines,
-            'outro' => $notification->outroLines,
-            'action_text' => $notification->actionText,
-            'action_url' => $notification->actionUrl,
-            'read' => false,
-        ]);
+        return response()->json('Notification sent.', 201);
     }
 
     /**
@@ -97,10 +62,10 @@ class NotificationsController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function markRead(Request $request, $id)
+    public function markAsRead(Request $request, $id)
     {
         $notification = $request->user()
-                                ->notifications()
+                                ->unreadNotifications()
                                 ->where('id', $id)
                                 ->first();
 
@@ -108,7 +73,7 @@ class NotificationsController extends Controller
             return response()->json('Notification not found.', 404);
         }
 
-        $notification->update(['read' => true]);
+        $notification->markAsRead();
 
         event(new NotificationRead($request->user()->id, $id));
     }
@@ -122,8 +87,7 @@ class NotificationsController extends Controller
     public function markAllRead(Request $request)
     {
         $request->user()
-                ->notifications()
-                ->where('read', false)
+                ->unreadNotifications()
                 ->update(['read' => true]);
 
         event(new NotificationReadAll($request->user()->id));
@@ -149,9 +113,7 @@ class NotificationsController extends Controller
             return response()->json('Subscription not found.', 404);
         }
 
-        $notification = $subscription->user->notifications()
-                            ->orderBy('id', 'desc')->first();
-
+        $notification = $subscription->user->unreadNotifications()->first();
         if (is_null($notification)) {
             return response()->json('Notification not found.', 404);
         }
@@ -180,14 +142,12 @@ class NotificationsController extends Controller
             return response()->json('Subscription not found.', 404);
         }
 
-        $notification = $subscription->user->notifications()
-                                    ->where('id', $id)->first();
-
-        $notification->update(['read' => true]);
-
+        $notification = $subscription->user->notifications()->where('id', $id)->first();
         if (is_null($notification)) {
             return response()->json('Notification not found.', 404);
         }
+
+        $notification->update(['read' => true]);
 
         event(new NotificationRead($subscription->user->id, $id));
     }
@@ -201,7 +161,7 @@ class NotificationsController extends Controller
     protected function payload($notification)
     {
         $payload = [
-            'title' => $notification->subject,
+            'title' => isset($notifications->intro[0]) ? $notifications->intro[0] : null,
             'body' => $this->format($notification),
             'actionText' => $notification->action_text ?: null,
             'actionUrl' => $notification->action_url ?: null,

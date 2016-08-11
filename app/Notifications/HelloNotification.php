@@ -2,14 +2,16 @@
 
 namespace App\Notifications;
 
-use Faker\Factory;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use NotificationChannels\WebPushNotifications\Message as WebPushMessage;
+use NotificationChannels\WebPushNotifications\Channel as WebPushChannel;
 
 class HelloNotification extends Notification
 {
-    // use Queueable;
+    use Queueable;
 
     /**
      * Create a new notification instance.
@@ -18,33 +20,50 @@ class HelloNotification extends Notification
      */
     public function __construct()
     {
-        $faker = Factory::create();
-
-        $this->subject('Hello from Laravel!')
-             ->line($faker->realText(50))
-             ->action('Go Home', url('/home'));
+        //
     }
 
     /**
-     * Get the notification channels.
+     * Get the notification's delivery channels.
      *
-     * @param  mixed $notifiable
-     * @return array|string
+     * @param  mixed  $notifiable
+     * @return array
      */
     public function via($notifiable)
     {
-        return ['webpush'];
+        return ['database', 'broadcast', WebPushChannel::class];
     }
 
     /**
-     * Get the notification message.
+     * Get the array representation of the notification.
      *
-     * @return void
+     * @param  mixed  $notifiable
+     * @return array
      */
-    public function message()
+    public function toArray($notifiable)
     {
-        // $this->subject('Hello from Laravel!')
-        //     ->line('Thank you for using our application!')
-        //     ->action('Notification Action', url('/home'));
+        return [
+            'title' => 'Hello from Laravel!',
+            'body' => 'Thank you for using our application.',
+            'action_url' => 'https://laravel.com',
+            'created' => Carbon::now()->toIso8601String()
+        ];
+    }
+
+    /**
+     * Get the web push representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @param  mixed  $notification
+     * @return \Illuminate\Notifications\Messages\DatabaseMessage
+     */
+    public function toWebPush($notifiable, $notification)
+    {
+        return (new WebPushMessage())
+            ->id($notification->id)
+            ->title('Hello from Laravel!')
+            ->icon('/notification-icon.png')
+            ->body('Thank you for using our application.')
+            ->action('View app', 'view_app');
     }
 }

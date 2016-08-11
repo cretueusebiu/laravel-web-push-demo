@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
-class PushSubscriptionsController extends Controller
+class PushSubscriptionController extends Controller
 {
     use ValidatesRequests;
 
