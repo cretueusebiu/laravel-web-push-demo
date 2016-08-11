@@ -17,16 +17,21 @@ window.Vue = Vue
 window.jQuery = window.$ = $
 require('bootstrap-sass/assets/javascripts/bootstrap')
 
-window.Echo = new Echo({
-  broadcaster: 'pusher',
-  key: window.PUSHER_OPTIONS.key,
-  cluster: window.PUSHER_OPTIONS.cluster
-})
+const {key, cluster} = window.PUSHER_OPTIONS;
+if (key) {
+  window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: key,
+    cluster: cluster
+  })
+}
 
 Vue.http.interceptors.push((request, next) => {
   request.headers['X-CSRF-TOKEN'] = window.Laravel.csrfToken
 
-  request.headers['X-Socket-ID'] = window.Echo.socketId()
+  if (window.Echo) {
+    request.headers['X-Socket-ID'] = window.Echo.socketId()
+  }
 
   next()
 })

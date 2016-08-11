@@ -46,7 +46,11 @@ export default {
   // mounted()
   ready() {
     this.fetch()
-    this.listen()
+
+    if (window.Echo) {
+      this.listen()
+    }
+
     this.initDropdown()
   },
 
