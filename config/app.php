@@ -166,7 +166,7 @@ return [
         /*
          * Package Service Providers...
          */
-        NotificationChannels\WebPushNotifications\Provider::class,
+        NotificationChannels\WebPush\WebPushServiceProvider::class,
 
         /*
          * Application Service Providers...

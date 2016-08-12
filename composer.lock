@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c34469b477c6091c40bb4ee10de0fc8f",
-    "content-hash": "7479452ff81365db009a2806f98e3048",
+    "hash": "affdbeac8bfc3ca27ef9d5ace4849d68",
+    "content-hash": "1bcbd4e0bea34b3a2087611dbb62154b",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -535,20 +535,21 @@
             "time": "2015-06-25 17:26:56"
         },
         {
-            "name": "laravel-notification-channels/web-push-notifications",
-            "version": "dev-master",
+            "name": "laravel-notification-channels/webpush",
+            "version": "0.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/cretueusebiu/laravel-web-push-notifications.git",
-                "reference": "ec96819fecd6c523cba00f67287b9c7049bec9b4"
+                "url": "https://github.com/laravel-notification-channels/webpush.git",
+                "reference": "4c4e4548bfe2094596fde4e8502f51a076849cdc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cretueusebiu/laravel-web-push-notifications/zipball/ec96819fecd6c523cba00f67287b9c7049bec9b4",
-                "reference": "ec96819fecd6c523cba00f67287b9c7049bec9b4",
+                "url": "https://api.github.com/repos/laravel-notification-channels/webpush/zipball/4c4e4548bfe2094596fde4e8502f51a076849cdc",
+                "reference": "4c4e4548bfe2094596fde4e8502f51a076849cdc",
                 "shasum": ""
             },
             "require": {
+                "illuminate/database": "^5.3@dev",
                 "illuminate/events": "^5.3@dev",
                 "illuminate/notifications": "^5.3@dev",
                 "illuminate/support": "^5.3@dev",
@@ -562,12 +563,12 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "NotificationChannels\\WebPushNotifications\\": "src"
+                    "NotificationChannels\\WebPush\\": "src"
                 }
             },
             "autoload-dev": {
                 "psr-4": {
-                    "NotificationChannels\\:WebPushNotifications\\Test\\": "tests"
+                    "NotificationChannels\\:WebPush\\Test\\": "tests"
                 }
             },
             "license": [
@@ -584,10 +585,10 @@
             "description": "Web Push Notifications driver for Laravel.",
             "homepage": "https://github.com/laravel-notification-channels/web-push-notifications",
             "support": {
-                "source": "https://github.com/cretueusebiu/laravel-web-push-notifications/tree/master",
-                "issues": "https://github.com/cretueusebiu/laravel-web-push-notifications/issues"
+                "source": "https://github.com/laravel-notification-channels/webpush/tree/0.0.1",
+                "issues": "https://github.com/laravel-notification-channels/webpush/issues"
             },
-            "time": "2016-08-11 21:10:43"
+            "time": "2016-08-12 11:05:14"
         },
         {
             "name": "laravel/framework",
@@ -595,12 +596,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "8769e25b09e7c38c852a2764ba238f3cd9d9f5d2"
+                "reference": "d209b61750ae10d3572731485164fb455c381e00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/8769e25b09e7c38c852a2764ba238f3cd9d9f5d2",
-                "reference": "8769e25b09e7c38c852a2764ba238f3cd9d9f5d2",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/d209b61750ae10d3572731485164fb455c381e00",
+                "reference": "d209b61750ae10d3572731485164fb455c381e00",
                 "shasum": ""
             },
             "require": {
@@ -714,7 +715,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2016-08-11 21:06:15"
+            "time": "2016-08-12 01:57:34"
         },
         {
             "name": "league/flysystem",
@@ -3981,7 +3982,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "laravel-notification-channels/web-push-notifications": 20
+        "laravel-notification-channels/webpush": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

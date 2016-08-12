@@ -6,8 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use NotificationChannels\WebPushNotifications\Message as WebPushMessage;
-use NotificationChannels\WebPushNotifications\Channel as WebPushChannel;
+use NotificationChannels\WebPush\WebPushMessage;
+use NotificationChannels\WebPush\WebPushChannel;
 
 class HelloNotification extends Notification
 {
@@ -59,7 +59,7 @@ class HelloNotification extends Notification
      */
     public function toWebPush($notifiable, $notification)
     {
-        return (new WebPushMessage())
+        return WebPushMessage::create()
             ->id($notification->id)
             ->title('Hello from Laravel!')
             ->icon('/notification-icon.png')

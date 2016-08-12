@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use NotificationChannels\WebPushNotifications\PushSubscription;
+use NotificationChannels\WebPush\PushSubscription;
 
 use App\Events\NotificationRead;
 use App\Events\NotificationReadAll;
