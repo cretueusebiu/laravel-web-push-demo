@@ -1,6 +1,6 @@
 # Laravel Web Push Notifications Demo
 
-> A demo showcasing the new [Notifications](https://laravel.com/docs/master/notifications) and [Echo](https://github.com/laravel/echo) features from Laravel 5.3.
+> A demo for the Laravel [Web Push](https://github.com/laravel-notification-channels/webpush) notification channel. 
 
 ![Demo](http://i.imgur.com/3QmEeVl.gif)
 
