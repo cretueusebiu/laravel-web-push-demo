@@ -47,7 +47,7 @@ class PushSubscriptionController extends Controller
     {
         $this->validate($request, ['endpoint' => 'required']);
 
-        $request->user()->deleteSubscription($request->endpoint);
+        $request->user()->deletePushSubscription($request->endpoint);
 
         return response()->json(null, 204);
     }
