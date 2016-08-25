@@ -149,7 +149,7 @@ class NotificationController extends Controller
             return response()->json('Notification not found.', 404);
         }
 
-        $notification->update(['read' => true]);
+        $notification->markAsRead();
 
         event(new NotificationRead($subscription->user->id, $id));
     }
