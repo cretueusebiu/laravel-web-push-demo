@@ -31,11 +31,16 @@ class NotificationController extends Controller
     {
         $user = $request->user();
 
-        $notifications = $user->unreadNotifications()
-            ->limit((int) $request->input('limit', 0))
-            ->get()->each(function ($n) {
-                $n->created = $n->created_at->toIso8601String();
-            });
+        // Limit the number of returned notifications, or return all
+        $query = $user->unreadNotifications();
+        $limit = (int) $request->input('limit', 0);
+        if ($limit) {
+            $query = $query->limit($limit);
+        }
+
+        $notifications = $query->get()->each(function ($n) {
+            $n->created = $n->created_at->toIso8601String();
+        });
 
         $total = $user->unreadNotifications->count();
 
