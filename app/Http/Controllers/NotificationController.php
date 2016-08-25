@@ -88,7 +88,9 @@ class NotificationController extends Controller
     {
         $request->user()
                 ->unreadNotifications()
-                ->update(['read' => true]);
+                ->get()->each(function ($n) {
+                    $n->markAsRead();
+                });
 
         event(new NotificationReadAll($request->user()->id));
     }
