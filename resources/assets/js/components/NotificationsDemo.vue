@@ -1,15 +1,35 @@
-//https://github.com/GoogleChrome/samples/tree/gh-pages/push-messaging-and-notifications
+<template>
+  <div>
+      <!-- Send notification button -->
+      <button
+        :disabled="loading"
+        @click="sendNotification"
+        type="button" class="btn btn-success btn-send">
+        Send Notification
+      </button>
+
+      <!-- Enable/Disable push notifications -->
+      <button
+        @click="togglePush"
+        :disabled="pushButtonDisabled || loading"
+        type="button" class="btn btn-primary"
+        :class="{ 'btn-primary': !isPushEnabled, 'btn-danger': isPushEnabled }">
+        {{ isPushEnabled ? 'Disable' : 'Enable' }} Push Notifications
+      </button>
+  </div>
+</template>
+
+<script>
+import axios from 'axios'
 
 export default {
-  data() {
-    return {
-      loading: false,
-      isPushEnabled: false,
-      pushButtonDisabled: true
-    }
-  },
+  data: () => ({
+    loading: false,
+    isPushEnabled: false,
+    pushButtonDisabled: true
+  }),
 
-  ready() {
+  mounted () {
     this.registerServiceWorker()
   },
 
@@ -17,16 +37,16 @@ export default {
     /**
      * Register the service worker.
      */
-    registerServiceWorker() {
+    registerServiceWorker () {
       if (!('serviceWorker' in navigator)) {
         console.log('Service workers aren\'t supported in this browser.')
         return
       }
 
-      navigator.serviceWorker.register('/sw.js').then(() => this.initialise())
+      navigator.serviceWorker.register('/sw.js').then(() => this.initialiseServiceWorker())
     },
 
-    initialise() {
+    initialiseServiceWorker () {
       if (!('showNotification' in ServiceWorkerRegistration.prototype)) {
         console.log('Notifications aren\'t supported.')
         return
@@ -42,7 +62,7 @@ export default {
         return
       }
 
-      navigator.serviceWorker.ready.then((registration) => {
+      navigator.serviceWorker.ready.then(registration => {
         registration.pushManager.getSubscription()
           .then(subscription => {
             this.pushButtonDisabled = false
@@ -55,8 +75,8 @@ export default {
 
             this.isPushEnabled = true
           })
-          .catch((err) => {
-            console.log('Error during getSubscription()', err)
+          .catch(e => {
+            console.log('Error during getSubscription()', e)
           })
       })
     },
@@ -64,9 +84,9 @@ export default {
     /**
      * Subscribe for push notifications.
      */
-    subscribe() {
-      navigator.serviceWorker.ready.then((registration) => {
-        registration.pushManager.subscribe({userVisibleOnly: true})
+    subscribe () {
+      navigator.serviceWorker.ready.then(registration => {
+        registration.pushManager.subscribe({ userVisibleOnly: true })
           .then(subscription => {
             this.isPushEnabled = true
             this.pushButtonDisabled = false
@@ -88,10 +108,10 @@ export default {
     /**
      * Unsubscribe from push notifications.
      */
-    unsubscribe() {
+    unsubscribe () {
       navigator.serviceWorker.ready.then(registration => {
         registration.pushManager.getSubscription().then(subscription => {
-          if (! subscription) {
+          if (!subscription) {
             this.isPushEnabled = false
             this.pushButtonDisabled = false
             return
@@ -115,7 +135,7 @@ export default {
     /**
      * Toggle push notifications subscription.
      */
-    togglePush() {
+    togglePush () {
       if (this.isPushEnabled) {
         this.unsubscribe()
       } else {
@@ -128,7 +148,7 @@ export default {
      *
      * @param {PushSubscription} subscription
      */
-    updateSubscription(subscription) {
+    updateSubscription (subscription) {
       const key = subscription.getKey('p256dh')
       const token = subscription.getKey('auth')
 
@@ -140,8 +160,8 @@ export default {
 
       this.loading = true
 
-      this.$http.post('/subscriptions', data)
-          .then(() => this.loading = false)
+      axios.post('/subscriptions', data)
+        .then(() => { this.loading = false })
     },
 
     /**
@@ -149,22 +169,30 @@ export default {
      *
      * @param {PushSubscription} subscription
      */
-    deleteSubscription(subscription) {
+    deleteSubscription (subscription) {
       this.loading = true
 
-      this.$http.post('/subscriptions/delete', {endpoint: subscription.endpoint})
-          .then(() => this.loading = false)
+      axios.post('/subscriptions/delete', { endpoint: subscription.endpoint })
+        .then(() => { this.loading = false })
     },
 
     /**
      * Send a request to the server for a push notification.
      */
-    sendNotification() {
+    sendNotification () {
       this.loading = true
 
-      this.$http.post('/notifications')
-          .catch(response => console.log(response))
-          .then(() => this.loading = false)
+      axios.post('/notifications')
+        .catch(error => console.log(error))
+        .then(() => { this.loading = false })
     }
   }
 }
+</script>
+
+<style scoped>
+.btn {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+</style>

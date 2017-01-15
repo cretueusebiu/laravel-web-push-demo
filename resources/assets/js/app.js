@@ -1,11 +1,14 @@
 import './bootstrap'
 import Vue from 'vue'
 
-import Notifications from './components/Notifications'
+import NotificationsDemo from './components/NotificationsDemo'
 import NotificationsDropdown from './components/NotificationsDropdown.vue'
 
 new Vue({
-  el: 'body',
+  el: '#app',
 
-  components: {Notifications, NotificationsDropdown}
+  components: {
+    NotificationsDemo,
+    NotificationsDropdown
+  }
 })

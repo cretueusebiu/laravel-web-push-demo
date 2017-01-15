@@ -2,21 +2,26 @@
   "private": true,
   "scripts": {
     "prod": "gulp --production",
-    "dev": "gulp watch"
+    "dev": "gulp watch --minimal"
+  },
+  "dependencies": {
+    "axios": "^0.15.3",
+    "bootstrap-sass": "^3.3.7",
+    "jquery": "^3.1.0",
+    "laravel-echo": "^1.2.0",
+    "pusher-js": "^4.0.0",
+    "vue": "^2.1.8",
+    "vue-timeago": "^3.1.5"
   },
   "devDependencies": {
-    "bootstrap-sass": "^3.3.7",
+    "eslint": "^3.13.0",
+    "eslint-config-vue": "^2.0.1",
+    "eslint-plugin-html": "^1.7.0",
+    "eslint-plugin-vue": "^1.0.0",
     "gulp": "^3.9.1",
-    "jquery": "^3.1.0",
-    "laravel-elixir": "^6.0.0-9",
-    "laravel-elixir-vue": "^0.1.4",
-    "laravel-elixir-webpack-official": "^1.0.2",
-    "lodash": "^4.14.0",
-    "vue": "^1.0.26",
-    "vue-resource": "^0.9.3",
     "json-loader": "^0.5.4",
-    "vue-timeago": "^2.1.2",
-    "laravel-echo": "^0.1.0",
-    "pusher-js": "^3.2.1"
+    "laravel-elixir": "^6.0.0-15",
+    "laravel-elixir-vue-2": "^0.3.0",
+    "laravel-elixir-webpack-official": "^1.0.10"
   }
 }

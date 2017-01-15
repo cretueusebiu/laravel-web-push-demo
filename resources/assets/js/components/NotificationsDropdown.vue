@@ -1,7 +1,7 @@
 <template>
-  <li class="dropdown dropdown-notifications" v-el:dropdown>
-    <a href="#" @click.prevent="toggleDropdown" class="dropdown-toggle">
-      <i data-count="{{ total }}" class="fa fa-bell notification-icon" :class="{'hide-count': !hasUnread}"></i>
+  <li ref="dropdown" class="dropdown dropdown-notifications">
+    <a @click.prevent="toggleDropdown" class="dropdown-toggle" href="#">
+      <i :data-count="total" class="fa fa-bell notification-icon" :class="{ 'hide-count': !hasUnread }"></i>
     </a>
 
     <div class="dropdown-container">
@@ -14,37 +14,37 @@
       </div>
 
       <ul class="dropdown-menu">
-        <notification v-for="notification in notifications" :notification="notification"></notification>
+        <notification v-for="notification in notifications"
+          :notification="notification"
+          v-on:read="markAsRead(notification)"
+        ></notification>
 
         <li v-if="!hasUnread" class="notification">
-            You don't have any unread notifications.
+          You don't have any unread notifications.
         </li>
       </ul>
 
       <div v-if="hasUnread" class="dropdown-footer text-center">
-        <a href="#" @click.prevent="fetchAll">View All</a>
+        <a href="#" @click.prevent="fetchAll(null)">View All</a>
       </div>
     </div>
   </li>
 </template>
 
 <script>
-import _ from 'lodash'
 import $ from 'jquery'
+import axios from 'axios'
 import Notification from './Notification.vue'
 
 export default {
-  components: {Notification},
+  components: { Notification },
 
-  data() {
-    return {
-      total: 0,
-      notifications: []
-    }
-  },
+  data: () => ({
+    total: 0,
+    notifications: []
+  }),
 
-  // mounted()
-  ready() {
+  mounted () {
     this.fetch()
 
     if (window.Echo) {
@@ -54,77 +54,101 @@ export default {
     this.initDropdown()
   },
 
-  events: {
-    'notification.read': function (notification) {
-      this.total--
-      this.notifications.$remove(notification)
-      this.$http.patch(`/notifications/${notification.id}/read`)
-    }
-  },
-
   computed: {
-    hasUnread() {
+    hasUnread () {
       return this.total > 0
     }
   },
 
   methods: {
-    listen() {
+    /**
+     * Fetch notifications.
+     *
+     * @param {Number} limit
+     */
+    fetch (limit = 5) {
+      axios.get('/notifications', { params: { limit }})
+        .then(({ data: { total, notifications }}) => {
+          this.total = total
+          this.notifications = notifications.map(({ id, data, created }) => {
+            return {
+              id: id,
+              title: data.title,
+              body: data.body,
+              created: created,
+              action_url: data.action_url
+            }
+          })
+        })
+    },
+
+    /**
+     * Mark the given notification as read.
+     *
+     * @param {Object} notification
+     */
+    markAsRead ({ id }) {
+      const index = this.notifications.findIndex(n => n.id === id)
+
+      if (index > -1) {
+        this.total--
+        this.notifications.splice(index, 1)
+        axios.patch(`/notifications/${id}/read`)
+      }
+    },
+
+    /**
+     * Mark all notifications as read.
+     */
+    markAllRead () {
+      this.total = 0
+      this.notifications = []
+
+      axios.post('/notifications/mark-all-read')
+    },
+
+    /**
+     * Listen for Echo push notifications.
+     */
+    listen () {
       window.Echo.private(`App.User.${window.USER.id}`)
         .notification(notification => {
           this.total++
           this.notifications.unshift(notification)
         })
-        .listen('NotificationRead', ({notificationId}) => {
+        .listen('NotificationRead', ({ notificationId }) => {
           this.total--
-          this.notifications = _.reject(this.notifications, (n) => n.id == notificationId)
+
+          const index = this.notifications.findIndex(n => n.id === notificationId)
+          if (index > -1) {
+            this.notifications.splice(index, 1)
+          }
         })
         .listen('NotificationReadAll', () => {
           this.total = 0
           this.notifications = []
-        });
+        })
     },
 
-    fetch(limit = 5) {
-      this.$http.get('/notifications', {params: {limit: limit}})
-          .then(({data}) => {
-            this.total = data.total
-            this.notifications = data.notifications.map(({id, data, created}) => {
-              return {
-                id: id,
-                title: data.title,
-                body: data.body,
-                action_url: data.action_url,
-                created: created
-              }
-            })
-          })
-    },
-
-    fetchAll() {
-      this.fetch(null)
-    },
-
-    markAllRead() {
-      this.total = 0
-      this.notifications = []
-
-      this.$http.post('/notifications/mark-all-read')
-    },
-
-    initDropdown() {
-      const dropdown = $(this.$els.dropdown)
+    /**
+     * Initialize the notifications dropdown.
+     */
+    initDropdown () {
+      const dropdown = $(this.$refs.dropdown)
 
       $(document).on('click', (e) => {
-        if (!dropdown.is(e.target) && dropdown.has(e.target).length === 0
-          && !$(e.target).parent().hasClass('notification-mark-read')) {
+        if (!dropdown.is(e.target) && dropdown.has(e.target).length === 0 &&
+          !$(e.target).parent().hasClass('notification-mark-read')) {
           dropdown.removeClass('open')
         }
-      });
+      })
     },
 
-    toggleDropdown() {
-      $(this.$els.dropdown).toggleClass('open')
+    /**
+     * Toggle the notifications dropdown.
+     */
+    toggleDropdown () {
+      $(this.$refs.dropdown).toggleClass('open')
     }
   }
 }

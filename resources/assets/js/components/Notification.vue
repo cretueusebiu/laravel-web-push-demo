@@ -35,8 +35,8 @@ export default {
   props: ['notification'],
 
   methods: {
-    markAsRead() {
-      this.$parent.$emit('notification.read', this.notification);
+    markAsRead () {
+      this.$emit('read')
     }
   }
 }

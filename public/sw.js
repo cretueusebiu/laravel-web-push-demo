@@ -2,7 +2,7 @@
   'use strict'
 
   const WebPush = {
-    init() {
+    init () {
       self.addEventListener('push', this.notificationPush.bind(this))
       self.addEventListener('notificationclick', this.notificationClick.bind(this))
       self.addEventListener('notificationclose', this.notificationClose.bind(this))
@@ -15,7 +15,7 @@
      *
      * @param {NotificationEvent} event
      */
-    notificationPush(event) {
+    notificationPush (event) {
       if (!(self.Notification && self.Notification.permission === 'granted')) {
         return
       }
@@ -25,11 +25,10 @@
         event.waitUntil(
             this.sendNotification(event.data.json())
         )
-      }
+      } else {
       // Otherwise just fetch the last notification from the server.
-      else {
         event.waitUntil(
-          self.registration.pushManager.getSubscription().then((subscription) => {
+          self.registration.pushManager.getSubscription().then(subscription => {
             if (subscription) {
               return this.fetchNofication(subscription)
             }
@@ -45,10 +44,10 @@
      *
      * @param {NotificationEvent} event
      */
-    notificationClick(event) {
+    notificationClick (event) {
       // const data = event.notification.data
 
-      if (event.action == 'open') {
+      if (event.action === 'open') {
         self.clients.openWindow('/')
       } else if (event.action === 'other') {
         //
@@ -64,8 +63,8 @@
      *
      * @param {NotificationEvent} event
      */
-    notificationClose(event) {
-      self.registration.pushManager.getSubscription().then((subscription) => {
+    notificationClose (event) {
+      self.registration.pushManager.getSubscription().then(subscription => {
         if (subscription) {
           this.dismissNotification(event, subscription)
         }
@@ -77,7 +76,7 @@
      *
      * @param {PushMessageData|Object} data
      */
-    sendNotification(data) {
+    sendNotification (data) {
       return self.registration.showNotification(data.title, {
         body: data.body,
         icon: data.icon || '/notification-icon.png',
@@ -92,13 +91,13 @@
      * @param  {String} subscription.endpoint
      * @return {Response}
      */
-    fetchNofication({endpoint}) {
-      return fetch(`/notifications/last?endpoint=${encodeURIComponent(endpoint)}`).then((response) => {
+    fetchNofication ({ endpoint }) {
+      return fetch(`/notifications/last?endpoint=${encodeURIComponent(endpoint)}`).then(response => {
         if (response.status !== 200) {
           throw new Error()
         }
 
-        return response.json().then((data) => {
+        return response.json().then(data => {
           return this.sendNotification(data)
         })
       })
@@ -111,12 +110,12 @@
      * @param  {String} subscription.endpoint
      * @return {Response}
      */
-    dismissNotification({notification}, {endpoint}) {
+    dismissNotification ({ notification }, { endpoint }) {
       if (!notification.data.id) {
         return
       }
 
-      const data = new FormData
+      const data = new FormData()
       data.append('endpoint', endpoint)
 
       // Send a request to the server to mark the notification as read.
@@ -128,4 +127,4 @@
   }
 
   WebPush.init()
-})();
+})()
