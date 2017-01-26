@@ -1,7 +1,9 @@
-/vendor
 /node_modules
 /public/storage
-Homestead.yaml
+/storage/*.key
+/vendor
+/.idea
 Homestead.json
-.env
+Homestead.yaml
 composer.lock
+.env

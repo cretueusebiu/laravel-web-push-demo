@@ -14,9 +14,9 @@
 - Edit `.env` 
     - Set your database connection details
     - Set `GCM_KEY` and `GCM_SENDER_ID` from [Google Console](https://console.cloud.google.com)
-    - (optional) Set `PUSHER_APP_ID`, `PUSHER_KEY`, `PUSHER_SECRET` from [Pusher](https://pusher.com/)
+    - (optional) Set `PUSHER_APP_ID`, `PUSHER_APP_KEY`, `PUSHER_APP_SECRET` from [Pusher](https://pusher.com/)
 - `php artisan migrate`
-- (optional) `npm install && gulp` / `yarn && gulp`
+- (optional) `npm install` / `yarn` && `npm run dev`
 
 ## Browser Compatibility
 
