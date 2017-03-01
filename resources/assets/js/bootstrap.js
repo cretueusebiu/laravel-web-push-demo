@@ -21,12 +21,14 @@ if (key) {
     key: key,
     cluster: cluster
   })
+
+  axios.interceptors.request.use(
+    config => {
+      config.headers['X-Socket-ID'] = window.Echo.socketId()
+      return config
+    },
+    error => Promise.reject(error)
+  )
 }
 
-axios.interceptors.request.use(
-  config => {
-    config.headers['X-Socket-ID'] = window.Echo.socketId()
-    return config
-  },
-  error => Promise.reject(error)
-)
+window.axios = axios
