@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0 - 2017-03-25
+
+- Added support for VAPID. 
+See [laravel-notification-channels/webpush@1.0.0](https://github.com/laravel-notification-channels/webpush/releases/tag/1.0.0)
+
 ## 0.3.0 - 2017-01-26
 
 - Upgraded to Laravel 5.4.

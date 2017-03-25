@@ -14,7 +14,7 @@ window.jQuery = window.$ = $
 require('bootstrap-sass/assets/javascripts/bootstrap')
 
 // Configure Laravel Echo
-const { key, cluster } = window.PUSHER_OPTIONS
+const { key, cluster } = window.Laravel.pusher
 if (key) {
   window.Echo = new Echo({
     broadcaster: 'pusher',

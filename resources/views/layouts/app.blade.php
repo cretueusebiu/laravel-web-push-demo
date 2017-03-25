@@ -5,8 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- GCM Manifest -->
-    <link rel="manifest" href="/manifest.json">
+    <!-- GCM Manifest (optional if VAPID is used) -->
+    @if (config('webpush.gcm.sender_id'))
+        <link rel="manifest" href="/manifest.json">
+    @endif
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -20,7 +22,13 @@
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
+            'user' => Auth::user(),
             'csrfToken' => csrf_token(),
+            'vapidPublicKey' => config('webpush.vapid.public_key'),
+            'pusher' => [
+                'key' => config('broadcasting.connections.pusher.key'),
+                'cluster' => config('broadcasting.connections.pusher.options.cluster'),
+            ],
         ]) !!};
     </script>
 </head>
@@ -90,15 +98,6 @@
         @yield('content')
     </div>
 
-    <!-- Scripts -->
-    <script>
-        window.USER = {!! Auth::check() ? Auth::user() : 'null' !!};
-
-        window.PUSHER_OPTIONS = {
-            key: '{{ config('broadcasting.connections.pusher.key') }}',
-            cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}'
-        };
-    </script>
     <script src="/js/app.js"></script>
 </body>
 </html>

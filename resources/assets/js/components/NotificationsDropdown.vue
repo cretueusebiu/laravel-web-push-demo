@@ -15,6 +15,7 @@
 
       <ul class="dropdown-menu">
         <notification v-for="notification in notifications"
+          :key="notification.id"
           :notification="notification"
           v-on:read="markAsRead(notification)"
         ></notification>
@@ -111,7 +112,7 @@ export default {
      * Listen for Echo push notifications.
      */
     listen () {
-      window.Echo.private(`App.User.${window.USER.id}`)
+      window.Echo.private(`App.User.${window.Laravel.user.id}`)
         .notification(notification => {
           this.total++
           this.notifications.unshift(notification)

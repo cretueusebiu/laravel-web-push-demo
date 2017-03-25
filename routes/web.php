@@ -31,10 +31,10 @@ Route::post('notifications/{id}/dismiss', 'NotificationController@dismiss');
 Route::post('subscriptions', 'PushSubscriptionController@update');
 Route::post('subscriptions/delete', 'PushSubscriptionController@destroy');
 
-// Manifest file
+// Manifest file (optional if VAPID is used)
 Route::get('manifest.json', function () {
     return [
         'name' => config('app.name'),
-        'gcm_sender_id' => config('services.gcm.sender_id')
+        'gcm_sender_id' => config('webpush.gcm.sender_id')
     ];
 });
