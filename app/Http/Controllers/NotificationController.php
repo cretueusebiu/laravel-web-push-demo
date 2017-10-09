@@ -186,8 +186,8 @@ class NotificationController extends Controller
      */
     protected function format($notification)
     {
-        $message = trim(implode(PHP_EOL.PHP_EOL, $notification->intro));
-        $message .= PHP_EOL.PHP_EOL.trim(implode(PHP_EOL.PHP_EOL, $notification->outro));
+        $message = trim(implode(PHP_EOL.PHP_EOL, $notification->intro ?: []));
+        $message .= PHP_EOL.PHP_EOL.trim(implode(PHP_EOL.PHP_EOL, $notification->outro ?: []));
 
         return trim($message);
     }
