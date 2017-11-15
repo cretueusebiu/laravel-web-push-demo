@@ -32,7 +32,12 @@
 
 <script>
 export default {
-  props: ['notification'],
+  props: {
+    notification: {
+      type: Object,
+      required: true
+    }
+  },
 
   methods: {
     markAsRead () {

@@ -43,7 +43,8 @@ export default {
         return
       }
 
-      navigator.serviceWorker.register('/sw.js').then(() => this.initialiseServiceWorker())
+      navigator.serviceWorker.register('/sw.js')
+        .then(() => this.initialiseServiceWorker())
     },
 
     initialiseServiceWorker () {

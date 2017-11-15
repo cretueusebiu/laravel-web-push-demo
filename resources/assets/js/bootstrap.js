@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import $ from 'jquery'
 import axios from 'axios'
+import Pusher from 'pusher-js'
 import Echo from 'laravel-echo'
 import VueTimeago from 'vue-timeago'
 
@@ -10,7 +11,9 @@ Vue.use(VueTimeago, {
 })
 
 window.Vue = Vue
+window.Pusher = Pusher
 window.jQuery = window.$ = $
+
 require('bootstrap-sass/assets/javascripts/bootstrap')
 
 // Configure Laravel Echo
