@@ -20,19 +20,10 @@
         return
       }
 
-      // Check if the notification has a payload.
+      // https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData
       if (event.data) {
         event.waitUntil(
-            this.sendNotification(event.data.json())
-        )
-      } else {
-      // Otherwise just fetch the last notification from the server.
-        event.waitUntil(
-          self.registration.pushManager.getSubscription().then(subscription => {
-            if (subscription) {
-              return this.fetchNofication(subscription)
-            }
-          })
+          this.sendNotification(event.data.json())
         )
       }
     },
@@ -45,21 +36,20 @@
      * @param {NotificationEvent} event
      */
     notificationClick (event) {
-      // const data = event.notification.data
+      console.log(event)
+      // console.log(event.notification)
 
-      if (event.action === 'open') {
-        self.clients.openWindow('/')
-      } else if (event.action === 'other') {
-        //
+      if (event.action === 'some_action') {
+        // Do something...
       } else {
         self.clients.openWindow('/')
       }
     },
 
     /**
-     * Handle notification close event (Chrome 50+).
+     * Handle notification close event (Chrome 50+, Firefox 55+).
      *
-     * https://developers.google.com/web/updates/2016/03/notifications?hl=en
+     * https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/onnotificationclose
      *
      * @param {NotificationEvent} event
      */
@@ -74,33 +64,12 @@
     /**
      * Send notification to the user.
      *
+     * https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/showNotification
+     *
      * @param {PushMessageData|Object} data
      */
     sendNotification (data) {
-      return self.registration.showNotification(data.title, {
-        body: data.body,
-        icon: data.icon || '/notification-icon.png',
-        data: data,
-        actions: data.actions || []
-      })
-    },
-
-    /**
-     * Fetch the last notification from the server.
-     *
-     * @param  {String} subscription.endpoint
-     * @return {Response}
-     */
-    fetchNofication ({ endpoint }) {
-      return fetch(`/notifications/last?endpoint=${encodeURIComponent(endpoint)}`).then(response => {
-        if (response.status !== 200) {
-          throw new Error()
-        }
-
-        return response.json().then(data => {
-          return this.sendNotification(data)
-        })
-      })
+      return self.registration.showNotification(data.title, data)
     },
 
     /**
@@ -111,7 +80,7 @@
      * @return {Response}
      */
     dismissNotification ({ notification }, { endpoint }) {
-      if (!notification.data.id) {
+      if (!notification.data || !notification.data.id) {
         return
       }
 

@@ -2,8 +2,8 @@
 
 namespace App\Notifications;
 
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Carbon;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use NotificationChannels\WebPush\WebPushMessage;
@@ -59,11 +59,11 @@ class HelloNotification extends Notification
      */
     public function toWebPush($notifiable, $notification)
     {
-        return WebPushMessage::create()
-            ->id($notification->id)
+        return (new WebPushMessage)
             ->title('Hello from Laravel!')
             ->icon('/notification-icon.png')
             ->body('Thank you for using our application.')
-            ->action('View app', 'view_app');
+            ->action('View app', 'view_app')
+            ->data(['id' => $notification->id]);
     }
 }

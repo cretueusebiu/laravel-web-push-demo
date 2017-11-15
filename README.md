@@ -21,7 +21,7 @@
 
 ## Browser Compatibility
 
-The [Push API](https://developer.mozilla.org/en/docs/Web/API/Push_API) currently works on Chrome and Firefox. Some features like the notification close event only works on Chrome. 
+The [Push API](https://developer.mozilla.org/en/docs/Web/API/Push_API) currently works on Chrome and Firefox.
 
 ## Changelog
 
