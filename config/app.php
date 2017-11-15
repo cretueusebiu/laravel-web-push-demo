@@ -166,8 +166,6 @@ return [
         /*
          * Package Service Providers...
          */
-        Laravel\Tinker\TinkerServiceProvider::class,
-        NotificationChannels\WebPush\WebPushServiceProvider::class,
 
         /*
          * Application Service Providers...
