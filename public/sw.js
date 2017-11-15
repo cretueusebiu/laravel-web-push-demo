@@ -36,7 +36,6 @@
      * @param {NotificationEvent} event
      */
     notificationClick (event) {
-      console.log(event)
       // console.log(event.notification)
 
       if (event.action === 'some_action') {
