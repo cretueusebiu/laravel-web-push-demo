@@ -21,7 +21,7 @@
 
 ## Browser Compatibility
 
-The [Push API](https://developer.mozilla.org/en/docs/Web/API/Push_API) currently works on Chrome and Firefox.
+See the [Push API](https://caniuse.com/#feat=push-api) browser compatibility.
 
 ## Changelog
 
