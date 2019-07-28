@@ -7,7 +7,7 @@ import VueTimeago from 'vue-timeago'
 
 Vue.use(VueTimeago, {
   locale: 'en-US',
-  locales: { 'en-US': require('json-loader!vue-timeago/locales/en-US.json') }
+  locales: { 'en-US': require('vue-timeago/locales/en-US.json') }
 })
 
 window.Vue = Vue
@@ -22,7 +22,8 @@ if (key) {
   window.Echo = new Echo({
     broadcaster: 'pusher',
     key: key,
-    cluster: cluster
+    cluster: cluster,
+    forceTLS: true
   })
 
   axios.interceptors.request.use(

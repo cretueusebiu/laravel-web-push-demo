@@ -13,11 +13,10 @@
 - `php artisan key:generate`
 - Edit `.env` 
     - Set your database connection details
-    - (optional) Set `GCM_KEY` and `GCM_SENDER_ID` from [Google Console](https://console.cloud.google.com)
-    - (optional) Set `PUSHER_APP_ID`, `PUSHER_APP_KEY`, `PUSHER_APP_SECRET` from [Pusher](https://pusher.com/)
+    - (optional) Set `PUSHER_APP_ID`, `PUSHER_APP_KEY`, `PUSHER_APP_SECRET` from [Pusher](https://pusher.com) and `BROADCAST_DRIVER=pusher`
 - `php artisan migrate`
 - `php artisan webpush:vapid` - Generates the VAPID keys required for browser authentication.
-- (optional) `npm install` or `yarn` and `npm run dev`
+- (optional) `npm install` and `npm run dev`
 
 ## Browser Compatibility
 

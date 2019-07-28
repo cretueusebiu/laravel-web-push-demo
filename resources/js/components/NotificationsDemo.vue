@@ -1,21 +1,24 @@
 <template>
   <div>
-      <!-- Send notification button -->
-      <button
-        :disabled="loading"
-        @click="sendNotification"
-        type="button" class="btn btn-success btn-send">
-        Send Notification
-      </button>
+    <!-- Send notification button -->
+    <button
+      :disabled="loading"
+      type="button"
+      class="btn btn-success btn-send" @click="sendNotification"
+    >
+      Send Notification
+    </button>
 
-      <!-- Enable/Disable push notifications -->
-      <button
-        @click="togglePush"
-        :disabled="pushButtonDisabled || loading"
-        type="button" class="btn btn-primary"
-        :class="{ 'btn-primary': !isPushEnabled, 'btn-danger': isPushEnabled }">
-        {{ isPushEnabled ? 'Disable' : 'Enable' }} Push Notifications
-      </button>
+    <!-- Enable/Disable push notifications -->
+    <button
+      :disabled="pushButtonDisabled || loading"
+      type="button"
+      class="btn btn-primary"
+      :class="{ 'btn-primary': !isPushEnabled, 'btn-danger': isPushEnabled }"
+      @click="togglePush"
+    >
+      {{ isPushEnabled ? 'Disable' : 'Enable' }} Push Notifications
+    </button>
   </div>
 </template>
 
@@ -159,11 +162,13 @@ export default {
     updateSubscription (subscription) {
       const key = subscription.getKey('p256dh')
       const token = subscription.getKey('auth')
+      const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0]
 
       const data = {
         endpoint: subscription.endpoint,
-        key: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null,
-        token: token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null
+        publicKey: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null,
+        authToken: token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null,
+        contentEncoding
       }
 
       this.loading = true
@@ -202,19 +207,19 @@ export default {
      * @return {Uint8Array}
      */
     urlBase64ToUint8Array (base64String) {
-        const padding = '='.repeat((4 - base64String.length % 4) % 4);
-        const base64 = (base64String + padding)
-          .replace(/\-/g, '+')
-          .replace(/_/g, '/')
+      const padding = '='.repeat((4 - base64String.length % 4) % 4)
+      const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/')
 
-        const rawData = window.atob(base64)
-        const outputArray = new Uint8Array(rawData.length)
+      const rawData = window.atob(base64)
+      const outputArray = new Uint8Array(rawData.length)
 
-        for (let i = 0; i < rawData.length; ++i) {
-            outputArray[i] = rawData.charCodeAt(i)
-        }
+      for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i)
+      }
 
-        return outputArray
+      return outputArray
     }
   }
 }

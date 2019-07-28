@@ -24,7 +24,7 @@ class PushSubscriptionController extends Controller
      * Update user's subscription.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request)
     {
@@ -32,16 +32,19 @@ class PushSubscriptionController extends Controller
 
         $request->user()->updatePushSubscription(
             $request->endpoint,
-            $request->key,
-            $request->token
+            $request->publicKey,
+            $request->authToken,
+            $request->contentEncoding
         );
+
+        return response()->json(null, 204);
     }
 
     /**
      * Delete the specified subscription.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request)
     {

@@ -8,8 +8,8 @@
       </div>
 
       <div class="media-body">
-        <a href="#" @click.prevent="markAsRead" class="notification-mark-read" title="Mark as read">
-          <i class="fa fa-times" aria-hidden="true"></i>
+        <a href="#" class="notification-mark-read" title="Mark as read" @click.prevent="markAsRead">
+          <i class="fa fa-times" aria-hidden="true" />
         </a>
 
         <strong class="notification-title">
@@ -22,7 +22,7 @@
 
         <div class="notification-meta">
           <small class="timestamp">
-            <timeago :since="notification.created" :auto-update="30"></timeago>
+            <timeago :since="notification.created" :auto-update="30" />
           </small>
         </div>
       </div>

@@ -1,8 +1,15 @@
 {
-  "env": {
-    "browser": true
+  "root": true,
+  "parserOptions": {
+    "parser": "babel-eslint",
+    "ecmaVersion": 2017,
+    "sourceType": "module"
   },
   "extends": [
-    "plugin:vue-libs/recommended"
-  ]
+    "plugin:vue/recommended",
+    "standard"
+  ],
+  "rules": {
+    "vue/max-attributes-per-line": "off"
+  }
 }

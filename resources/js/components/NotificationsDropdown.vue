@@ -1,7 +1,7 @@
 <template>
   <li ref="dropdown" class="dropdown dropdown-notifications">
-    <a @click.prevent="toggleDropdown" class="dropdown-toggle" href="#">
-      <i :data-count="total" class="fa fa-bell notification-icon" :class="{ 'hide-count': !hasUnread }"></i>
+    <a class="dropdown-toggle" href="#" @click.prevent="toggleDropdown">
+      <i :data-count="total" class="fa fa-bell notification-icon" :class="{ 'hide-count': !hasUnread }" />
     </a>
 
     <div class="dropdown-container">
@@ -10,15 +10,17 @@
           <a href="#" @click.prevent="markAllRead">Mark all as read</a>
         </div>
 
-        <h3 class="dropdown-toolbar-title">Notifications ({{ total }})</h3>
+        <h3 class="dropdown-toolbar-title">
+          Notifications ({{ total }})
+        </h3>
       </div>
 
       <ul class="dropdown-menu">
         <notification v-for="notification in notifications"
-          :key="notification.id"
-          :notification="notification"
-          v-on:read="markAsRead(notification)"
-        ></notification>
+                      :key="notification.id"
+                      :notification="notification"
+                      @read="markAsRead(notification)"
+        />
 
         <li v-if="!hasUnread" class="notification">
           You don't have any unread notifications.
@@ -45,6 +47,12 @@ export default {
     notifications: []
   }),
 
+  computed: {
+    hasUnread () {
+      return this.total > 0
+    }
+  },
+
   mounted () {
     this.fetch()
 
@@ -55,12 +63,6 @@ export default {
     this.initDropdown()
   },
 
-  computed: {
-    hasUnread () {
-      return this.total > 0
-    }
-  },
-
   methods: {
     /**
      * Fetch notifications.
@@ -68,8 +70,8 @@ export default {
      * @param {Number} limit
      */
     fetch (limit = 5) {
-      axios.get('/notifications', { params: { limit }})
-        .then(({ data: { total, notifications }}) => {
+      axios.get('/notifications', { params: { limit } })
+        .then(({ data: { total, notifications } }) => {
           this.total = total
           this.notifications = notifications.map(({ id, data, created }) => {
             return {
