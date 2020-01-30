@@ -28,7 +28,7 @@
       </ul>
 
       <div v-if="hasUnread" class="dropdown-footer text-center">
-        <a href="#" @click.prevent="fetchAll(null)">View All</a>
+        <a href="#" @click.prevent="fetch(null)">View All</a>
       </div>
     </div>
   </li>
