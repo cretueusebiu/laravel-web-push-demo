@@ -7,7 +7,7 @@
     "require": {
         "php": ">=7.0.0",
         "fideloper/proxy": "^4.0",
-        "laravel-notification-channels/webpush": "dev-master#93cd1df5e43ff61a1a4d68229ec1908089114a7a",
+        "laravel-notification-channels/webpush": "^5.0",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "~1.0",
         "pusher/pusher-php-server": "^3.0"
