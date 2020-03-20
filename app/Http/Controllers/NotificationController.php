@@ -120,13 +120,13 @@ class NotificationController extends Controller
             return response()->json('Subscription not found.', 404);
         }
 
-        $notification = $subscription->user->notifications()->where('id', $id)->first();
+        $notification = $subscription->subscribable->notifications()->where('id', $id)->first();
         if (is_null($notification)) {
             return response()->json('Notification not found.', 404);
         }
 
         $notification->markAsRead();
 
-        event(new NotificationRead($subscription->user->id, $id));
+        event(new NotificationRead($subscription->subscribable->id, $id));
     }
 }
