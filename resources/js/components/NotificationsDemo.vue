@@ -4,7 +4,8 @@
     <button
       :disabled="loading"
       type="button"
-      class="btn btn-success btn-send" @click="sendNotification"
+      class="btn btn-success btn-send"
+      @click="sendNotification"
     >
       Send Notification
     </button>
@@ -41,6 +42,7 @@ export default {
      * Register the service worker.
      */
     registerServiceWorker () {
+      console.log('RegisterServiceworker')
       if (!('serviceWorker' in navigator)) {
         console.log('Service workers aren\'t supported in this browser.')
         return
@@ -48,9 +50,14 @@ export default {
 
       navigator.serviceWorker.register('/sw.js')
         .then(() => this.initialiseServiceWorker())
+      // //add listener
+      // navigator.serviceWorker.addEventListener('message', function (event) {
+      //   console.log('Message1 listener', event.data); // Hello World !
+      // });
     },
 
     initialiseServiceWorker () {
+      console.log('initialiseServiceWorker')
       if (!('showNotification' in ServiceWorkerRegistration.prototype)) {
         console.log('Notifications aren\'t supported.')
         return
@@ -83,6 +90,8 @@ export default {
             console.log('Error during getSubscription()', e)
           })
       })
+
+
     },
 
     /**
@@ -197,7 +206,10 @@ export default {
 
       axios.post('/notifications')
         .catch(error => console.log(error))
-        .then(() => { this.loading = false })
+        .then(() => {
+          console.log('notification-sent')
+          this.loading = false
+        })
     },
 
     /**

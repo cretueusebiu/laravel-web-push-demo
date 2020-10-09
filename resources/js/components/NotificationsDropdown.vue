@@ -1,13 +1,30 @@
 <template>
-  <li ref="dropdown" class="dropdown dropdown-notifications">
-    <a class="dropdown-toggle" href="#" @click.prevent="toggleDropdown">
-      <i :data-count="total" class="fa fa-bell notification-icon" :class="{ 'hide-count': !hasUnread }" />
+  <li
+    ref="dropdown"
+    class="dropdown dropdown-notifications"
+  >
+    <a
+      class="dropdown-toggle"
+      href="#"
+      @click.prevent="toggleDropdown"
+    >
+      <i
+        :data-count="total"
+        class="fa fa-bell notification-icon"
+        :class="{ 'hide-count': !hasUnread }"
+      />
     </a>
 
     <div class="dropdown-container">
       <div class="dropdown-toolbar">
-        <div v-show="hasUnread" class="dropdown-toolbar-actions">
-          <a href="#" @click.prevent="markAllRead">Mark all as read</a>
+        <div
+          v-show="hasUnread"
+          class="dropdown-toolbar-actions"
+        >
+          <a
+            href="#"
+            @click.prevent="markAllRead"
+          >Mark all as read</a>
         </div>
 
         <h3 class="dropdown-toolbar-title">
@@ -16,19 +33,29 @@
       </div>
 
       <ul class="dropdown-menu">
-        <notification v-for="notification in notifications"
-                      :key="notification.id"
-                      :notification="notification"
-                      @read="markAsRead(notification)"
+        <notification
+          v-for="notification in notifications"
+          :key="notification.id"
+          :notification="notification"
+          @read="markAsRead(notification)"
         />
 
-        <li v-if="!hasUnread" class="notification">
+        <li
+          v-if="!hasUnread"
+          class="notification"
+        >
           You don't have any unread notifications.
         </li>
       </ul>
 
-      <div v-if="hasUnread" class="dropdown-footer text-center">
-        <a href="#" @click.prevent="fetch(null)">View All</a>
+      <div
+        v-if="hasUnread"
+        class="dropdown-footer text-center"
+      >
+        <a
+          href="#"
+          @click.prevent="fetch(null)"
+        >View All</a>
       </div>
     </div>
   </li>
@@ -56,11 +83,13 @@ export default {
   mounted () {
     this.fetch()
 
-    if (window.Echo) {
-      this.listen()
-    }
+    // if (window.Echo) {
+    //   this.listen()
+    // }
 
     this.initDropdown()
+    //
+    this.addMessageListener()
   },
 
   methods: {
@@ -116,20 +145,13 @@ export default {
     listen () {
       window.Echo.private(`App.User.${window.Laravel.user.id}`)
         .notification(notification => {
-          this.total++
-          this.notifications.unshift(notification)
+          this.insertNotification(notification)
         })
         .listen('NotificationRead', ({ notificationId }) => {
-          this.total--
-
-          const index = this.notifications.findIndex(n => n.id === notificationId)
-          if (index > -1) {
-            this.notifications.splice(index, 1)
-          }
+          this.deleteNotification(notificationId)
         })
         .listen('NotificationReadAll', () => {
-          this.total = 0
-          this.notifications = []
+          this.deleteAllNotifications()
         })
     },
 
@@ -152,6 +174,37 @@ export default {
      */
     toggleDropdown () {
       $(this.$refs.dropdown).toggleClass('open')
+    },
+
+    insertNotification (notification) {
+      this.total++
+      this.notifications.unshift(notification)
+    },
+
+    deleteNotification (id) {
+      this.total--
+
+      const index = this.notifications.findIndex(n => n.id === id)
+      if (index > -1) {
+        this.notifications.splice(index, 1)
+      }
+    },
+
+    deleteAllNotifications () {
+      this.total = 0
+      this.notifications = []
+    },
+
+    addMessageListener () {
+      if (!('serviceWorker' in navigator)) {
+        console.log('Service workers aren\'t supported in this browser.')
+        return
+      }
+
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        console.log('Message1 listener', event.data); // Hello World !
+        this.insertNotification(event.data)
+      })
     }
   }
 }

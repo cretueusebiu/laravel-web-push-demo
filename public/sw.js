@@ -20,12 +20,42 @@
         return
       }
 
-      // https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData
-      if (event.data) {
-        event.waitUntil(
-          this.sendNotification(event.data.json())
-        )
+      if (event && event.data) {
+        self.pushData = event.data.json();
+        if (self.pushData) {
+          event.waitUntil(self.registration.showNotification(self.pushData.title, {
+            body: self.pushData.body,
+            icon: self.pushData.data ? self.pushData.data.icon : null
+          }).then(_=> {
+            clients.matchAll({type: 'window'}).then((clientList) => {
+              if (clientList.length > 0) {
+                console.log('the data', self.pushData)
+                this.messageToClient(clientList[0], self.pushData)
+                //   // message: self.pushData.body // suppose it is: "Hello World !"
+                //   message: self.pushData // suppose it is: "Hello World !"
+                // });
+              }
+            });
+          }));
+        }
       }
+
+      // https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData
+      // if (event.data) {
+      //   event.waitUntil(
+      //     this.sendNotification(event.data.json())
+      //   )
+      //   .then(function() {
+      //       console.log('notificationPush @then')
+      //       clients.matchAll({type: 'window'}).then(function (clientList) {
+      //       if (clientList.length > 0) {
+      //         this.messageToClient(clientList[0], {
+      //           message: self.pushData.body // suppose it is: "Hello World !"
+      //         })
+      //       }
+      //     })
+      //   })
+      // }
     },
 
     /**
@@ -36,10 +66,11 @@
      * @param {NotificationEvent} event
      */
     notificationClick (event) {
-      // console.log(event.notification)
+      console.log(event.notification)
 
       if (event.action === 'some_action') {
         // Do something...
+        console.log('at action')
       } else {
         self.clients.openWindow('/')
       }
@@ -68,6 +99,7 @@
      * @param {PushMessageData|Object} data
      */
     sendNotification (data) {
+      console.log('sendNotification', data)
       return self.registration.showNotification(data.title, data)
     },
 
@@ -91,6 +123,25 @@
         method: 'POST',
         body: data
       })
+    },
+
+    // send to client test
+    messageToClient(client, data) {
+      console.log('messageToClient', client, data)
+      return new Promise((resolve, reject) => {
+        const channel = new MessageChannel();
+
+        channel.port1.onmessage = (event) => {
+          if (event.data.error) {
+            reject(event.data.error);
+          } else {
+            resolve(event.data);
+          }
+        };
+
+        // client.postMessage(JSON.stringify(data), [channel.port2]);
+        client.postMessage(data, [channel.port2]);
+      });
     }
   }
 
