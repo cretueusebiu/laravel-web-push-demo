@@ -11,7 +11,7 @@
     "lint": "eslint --fix --ext .js,.vue resources/js"
   },
   "dependencies": {
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "bootstrap-sass": "^3.4.1",
     "jquery": "^3.4.1",
     "laravel-echo": "^1.5.4",
