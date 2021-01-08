@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.0 - 2021-01-08
+
+- Upgraded to Laravel 8.
+
 ## 3.0.0 - 2019-07-28
 
 - Upgraded to Laravel 5.7.
@@ -13,8 +17,7 @@
 
 ## 1.0.0 - 2017-03-25
 
-- Added support for VAPID. 
-See [webpush@1.0.0](https://github.com/laravel-notification-channels/webpush/releases/tag/1.0.0)
+- Added support for VAPID. See [webpush@1.0.0](https://github.com/laravel-notification-channels/webpush/releases/tag/1.0.0)
 
 ## 0.3.0 - 2017-01-26
 

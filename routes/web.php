@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PushSubscriptionController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,18 +23,18 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+Route::get('/home', [HomeController::class, 'index']);
 
 // Notifications
-Route::post('notifications', 'NotificationController@store');
-Route::get('notifications', 'NotificationController@index');
-Route::patch('notifications/{id}/read', 'NotificationController@markAsRead');
-Route::post('notifications/mark-all-read', 'NotificationController@markAllRead');
-Route::post('notifications/{id}/dismiss', 'NotificationController@dismiss');
+Route::post('notifications', [NotificationController::class, 'store']);
+Route::get('notifications', [NotificationController::class, 'index']);
+Route::patch('notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+Route::post('notifications/mark-all-read', [NotificationController::class, 'markAllRead']);
+Route::post('notifications/{id}/dismiss', [NotificationController::class, 'dismiss']);
 
 // Push Subscriptions
-Route::post('subscriptions', 'PushSubscriptionController@update');
-Route::post('subscriptions/delete', 'PushSubscriptionController@destroy');
+Route::post('subscriptions', [PushSubscriptionController::class, 'update']);
+Route::post('subscriptions/delete', [PushSubscriptionController::class, 'destroy']);
 
 // Manifest file (optional if VAPID is used)
 Route::get('manifest.json', function () {

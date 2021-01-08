@@ -16,7 +16,6 @@ window.jQuery = window.$ = $
 
 require('bootstrap-sass/assets/javascripts/bootstrap')
 
-// Configure Laravel Echo
 const { key, cluster } = window.Laravel.pusher
 if (key) {
   window.Echo = new Echo({
@@ -26,13 +25,13 @@ if (key) {
     forceTLS: true
   })
 
-  axios.interceptors.request.use(
-    config => {
-      config.headers['X-Socket-ID'] = window.Echo.socketId()
-      return config
-    },
-    error => Promise.reject(error)
-  )
+  // axios.interceptors.request.use(
+  //   config => {
+  //     config.headers['X-Socket-ID'] = window.Echo.socketId()
+  //     return config
+  //   },
+  //   error => Promise.reject(error)
+  // )
 }
 
 window.axios = axios
