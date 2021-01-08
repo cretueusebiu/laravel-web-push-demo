@@ -1,8 +1,10 @@
 preset: laravel
+
 disabled:
-- no_unused_imports
+  - no_unused_imports
+
 finder:
-not-name:
-    - index.php
-    - server.php
+  not-name:
+  - index.php
+  - server.php
 
