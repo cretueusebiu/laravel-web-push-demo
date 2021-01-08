@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Events\NotificationRead;
 use App\Events\NotificationReadAll;
 use App\Notifications\HelloNotification;
+use Illuminate\Http\Request;
 use NotificationChannels\WebPush\PushSubscription;
 
 class NotificationController extends Controller
