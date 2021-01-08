@@ -3,11 +3,11 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Carbon;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use NotificationChannels\WebPush\WebPushMessage;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Carbon;
 use NotificationChannels\WebPush\WebPushChannel;
+use NotificationChannels\WebPush\WebPushMessage;
 
 class HelloNotification extends Notification
 {
@@ -46,7 +46,7 @@ class HelloNotification extends Notification
             'title' => 'Hello from Laravel!',
             'body' => 'Thank you for using our application.',
             'action_url' => 'https://laravel.com',
-            'created' => Carbon::now()->toIso8601String()
+            'created' => Carbon::now()->toIso8601String(),
         ];
     }
 

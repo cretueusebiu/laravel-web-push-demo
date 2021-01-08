@@ -40,6 +40,6 @@ Route::post('subscriptions/delete', [PushSubscriptionController::class, 'destroy
 Route::get('manifest.json', function () {
     return [
         'name' => config('app.name'),
-        'gcm_sender_id' => config('webpush.gcm.sender_id')
+        'gcm_sender_id' => config('webpush.gcm.sender_id'),
     ];
 });
